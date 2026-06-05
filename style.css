@@ -1,0 +1,1463 @@
+/* style.css */
+/* Hệ thống thiết kế CSS thuần (Vanilla) cho Webapp Quản lý công việc */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Định dạng Font */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-title: 'Outfit', sans-serif;
+
+  /* Bảng màu giao diện SÁNG (Default Light Mode) */
+  --bg-main: #f8fafc;        /* Slate 50 */
+  --bg-card: #ffffff;        /* Trắng */
+  --bg-sidebar: #0f172a;     /* Slate 900 (Sidebar luôn tối để tạo chiều sâu) */
+  --bg-sidebar-hover: #1e293b;
+  --text-sidebar: #94a3b8;
+  --text-sidebar-active: #ffffff;
+  
+  --text-main: #0f172a;      /* Slate 900 */
+  --text-muted: #64748b;     /* Slate 500 */
+  --border-color: #e2e8f0;   /* Slate 200 */
+  --input-bg: #ffffff;
+  
+  /* Màu chủ đạo (Indigo/Violet hiện đại) */
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-light: #e0e7ff;
+  
+  /* Màu trạng thái công việc */
+  --color-todo: #64748b;
+  --color-todo-bg: #f1f5f9;
+  --color-in-progress: #3b82f6;
+  --color-in-progress-bg: #dbeafe;
+  --color-done: #10b981;
+  --color-done-bg: #d1fae5;
+
+  /* Màu góc Ma trận Eisenhower */
+  --q1-color: #ef4444; /* Khẩn cấp & Quan trọng - Đỏ */
+  --q1-bg: #fee2e2;
+  --q2-color: #f59e0b; /* Quan trọng nhưng Không khẩn cấp - Vàng/Cam */
+  --q2-bg: #fef3c7;
+  --q3-color: #3b82f6; /* Khẩn cấp nhưng Không quan trọng - Xanh dương */
+  --q3-bg: #dbeafe;
+  --q4-color: #10b981; /* Không khẩn cấp & Không quan trọng - Xanh lá */
+  --q4-bg: #d1fae5;
+
+  /* Hệ thống bóng đổ (Shadows) */
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.08);
+  --shadow-drag: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.15);
+  
+  /* Góc bo tròn (Radii) */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+  
+  /* Thời gian chuyển động */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Bảng màu giao diện TỐI (Dark Mode) */
+[data-theme="dark"] {
+  --bg-main: #0b0f19;        /* Nền tối sâu */
+  --bg-card: #151f32;        /* Xám xanh đậm */
+  --bg-sidebar: #0a0d16;
+  --bg-sidebar-hover: #151f32;
+  --text-sidebar: #64748b;
+  --text-sidebar-active: #f8fafc;
+  
+  --text-main: #f8fafc;      /* Slate 50 */
+  --text-muted: #94a3b8;     /* Slate 400 */
+  --border-color: #1e293b;   /* Slate 800 */
+  --input-bg: #1e293b;
+  
+  --primary-light: rgba(99, 102, 241, 0.15);
+  
+  /* Trạng thái trong Darkmode */
+  --color-todo-bg: rgba(100, 116, 139, 0.15);
+  --color-in-progress-bg: rgba(59, 130, 246, 0.15);
+  --color-done-bg: rgba(16, 185, 129, 0.15);
+  
+  /* Ma trận trong Darkmode */
+  --q1-bg: rgba(239, 68, 68, 0.15);
+  --q2-bg: rgba(245, 158, 11, 0.15);
+  --q3-bg: rgba(59, 130, 246, 0.15);
+  --q4-bg: rgba(16, 185, 129, 0.15);
+
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+}
+
+/* ----------------------------------------------------
+   Cài đặt Reset & Cơ bản
+   ---------------------------------------------------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
+  font-weight: 600;
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  transition: all var(--transition-fast);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Thanh cuộn tùy biến */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ----------------------------------------------------
+   Cấu trúc Bố cục Layout
+   ---------------------------------------------------- */
+/* Thanh Sidebar Điều hướng */
+.sidebar {
+  width: 260px;
+  background-color: var(--bg-sidebar);
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.5rem;
+  z-index: 100;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 3rem;
+  color: #ffffff;
+}
+
+.brand svg {
+  width: 32px;
+  height: 32px;
+  color: var(--primary);
+}
+
+.brand h1 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  list-style: none;
+  flex: 1;
+}
+
+.nav-item button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-sm);
+  color: var(--text-sidebar);
+  font-weight: 500;
+  text-align: left;
+}
+
+.nav-item button svg {
+  width: 20px;
+  height: 20px;
+  transition: transform var(--transition-fast);
+}
+
+.nav-item button:hover {
+  color: var(--text-sidebar-active);
+  background-color: var(--bg-sidebar-hover);
+}
+
+.nav-item button:hover svg {
+  transform: translateX(3px);
+}
+
+.nav-item.active button {
+  color: var(--text-sidebar-active);
+  background-color: var(--primary);
+}
+
+.nav-item.active button svg {
+  color: #ffffff;
+}
+
+/* Footer Sidebar (Theme toggle & info) */
+.sidebar-footer {
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.theme-toggle-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.theme-toggle-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.theme-toggle-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Panel Nội dung chính */
+.main-content {
+  margin-left: 260px;
+  flex: 1;
+  padding: 2rem 2.5rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: calc(100vw - 260px);
+}
+
+/* Header ứng dụng */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1.5rem;
+}
+
+.header-title h2 {
+  font-size: 1.75rem;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+}
+
+.header-title p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Nút bấm chung */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: #ffffff;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-main);
+}
+
+.btn-danger {
+  background-color: #fee2e2;
+  color: #ef4444;
+}
+
+.btn-danger:hover {
+  background-color: #fecaca;
+}
+
+/* --- Panel của từng View --- */
+.view-panel {
+  display: none;
+  animation: fadeIn var(--transition-normal);
+}
+
+.view-panel.active {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ----------------------------------------------------
+   VIEW: Dashboard (Trang chủ)
+   ---------------------------------------------------- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-info h3 {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-number {
+  font-size: 2.25rem;
+  font-weight: 700;
+  font-family: var(--font-title);
+  margin-top: 0.5rem;
+  color: var(--text-main);
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-card.primary .stat-icon { background-color: rgba(99, 102, 241, 0.12); color: var(--primary); }
+.stat-card.danger .stat-icon { background-color: rgba(239, 68, 68, 0.12); color: #ef4444; }
+.stat-card.success .stat-icon { background-color: rgba(16, 185, 129, 0.12); color: #10b981; }
+.stat-card.warning .stat-icon { background-color: rgba(245, 158, 11, 0.12); color: #f59e0b; }
+
+.dashboard-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-details-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dashboard-section-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.dashboard-section-card h3 {
+  font-size: 1.15rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.project-quick-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.project-quick-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-main);
+  transition: transform var(--transition-fast);
+}
+
+.project-quick-card:hover {
+  transform: translateX(4px);
+}
+
+.project-quick-card .project-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.project-quick-card .project-tasks-count {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ----------------------------------------------------
+   VIEW: Dự án (List & Details)
+   ---------------------------------------------------- */
+.project-list-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.project-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.project-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Thẻ Dự án */
+.project-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+  transition: all var(--transition-normal);
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Đường trang trí góc ma trận ở đầu card */
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.project-card[data-quadrant="1"]::before { background-color: var(--q1-color); }
+.project-card[data-quadrant="2"]::before { background-color: var(--q2-color); }
+.project-card[data-quadrant="3"]::before { background-color: var(--q3-color); }
+.project-card[data-quadrant="4"]::before { background-color: var(--q4-color); }
+
+.project-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.project-card-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.3;
+}
+
+.project-card-desc {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 2.6rem;
+}
+
+.project-card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.project-quadrant-badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+}
+
+.project-card[data-quadrant="1"] .project-quadrant-badge { color: var(--q1-color); background-color: var(--q1-bg); }
+.project-card[data-quadrant="2"] .project-quadrant-badge { color: var(--q2-color); background-color: var(--q2-bg); }
+.project-card[data-quadrant="3"] .project-quadrant-badge { color: var(--q3-color); background-color: var(--q3-bg); }
+.project-card[data-quadrant="4"] .project-quadrant-badge { color: var(--q4-color); background-color: var(--q4-bg); }
+
+/* Thành viên trong Dự án */
+.avatar-group {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 2px solid var(--bg-card);
+  margin-left: -8px;
+  position: relative;
+  cursor: default;
+}
+
+.avatar:first-child {
+  margin-left: 0;
+}
+
+.avatar[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--bg-sidebar);
+  color: #fff;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 10;
+  box-shadow: var(--shadow-md);
+}
+
+/* ----------------------------------------------------
+   VIEW CHI TIẾT DỰ ÁN (Project Detail)
+   ---------------------------------------------------- */
+.project-detail-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.project-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.project-breadcrumb button:hover {
+  color: var(--primary);
+}
+
+.project-title-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.project-meta-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.project-meta-info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.project-view-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-top: 1rem;
+}
+
+.tab-btn {
+  padding: 0.75rem 1.25rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tab-btn:hover {
+  color: var(--text-main);
+}
+
+.tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  font-weight: 600;
+}
+
+/* Bố cục Kanban Board */
+.kanban-board-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.kanban-column {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 280px);
+}
+
+.kanban-column-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.kanban-column-title {
+  font-weight: 600;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.kanban-column-badge {
+  background-color: var(--bg-main);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.kanban-tasks-list {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+  min-height: 250px;
+  flex: 1;
+}
+
+/* Thẻ Công việc (Task card) */
+.task-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  cursor: grab;
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  position: relative;
+  user-select: none;
+  touch-action: none; /* Khóa cuộn màn hình khi giữ kéo trên mobile */
+}
+
+.task-card:active {
+  cursor: grabbing;
+}
+
+.task-card:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+}
+
+.task-card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.task-card-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.task-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+
+.task-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.task-card:hover .task-card-actions {
+  opacity: 1;
+}
+
+.task-card-actions button {
+  color: var(--text-muted);
+}
+
+.task-card-actions button:hover {
+  color: var(--text-main);
+}
+
+.task-card-actions button.btn-task-delete:hover {
+  color: #ef4444;
+}
+
+/* Thẻ Danh sách công việc (List View) */
+.list-view-container {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.task-list-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 150px;
+}
+
+.task-list-row {
+  display: flex;
+  align-items: center;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-color);
+  gap: 1.5rem;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.task-list-row:hover {
+  border-color: var(--primary);
+}
+
+.task-row-status-badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+}
+
+.task-row-status-badge[data-status="todo"] { color: var(--color-todo); background-color: var(--color-todo-bg); }
+.task-row-status-badge[data-status="in-progress"] { color: var(--color-in-progress); background-color: var(--color-in-progress-bg); }
+.task-row-status-badge[data-status="done"] { color: var(--color-done); background-color: var(--color-done-bg); }
+
+.task-row-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  flex: 1;
+}
+
+.task-row-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  flex: 2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.task-row-meta {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.drag-handle {
+  color: var(--text-muted);
+  cursor: grab;
+  display: flex;
+  align-items: center;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.task-list-row .task-card-actions {
+  opacity: 1;
+}
+
+/* ----------------------------------------------------
+   VIEW: Ma trận Eisenhower
+   ---------------------------------------------------- */
+.matrix-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1.5rem;
+  min-height: calc(100vh - 220px);
+}
+
+.matrix-quadrant {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: all var(--transition-normal);
+}
+
+.matrix-quadrant-header {
+  padding: 1rem 1.25rem;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.matrix-quadrant-title {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.matrix-quadrant-desc {
+  font-size: 0.75rem;
+  opacity: 0.85;
+  font-weight: 400;
+}
+
+.matrix-quadrant[data-quadrant="1"] .matrix-quadrant-header { background-color: var(--q1-color); }
+.matrix-quadrant[data-quadrant="2"] .matrix-quadrant-header { background-color: var(--q2-color); }
+.matrix-quadrant[data-quadrant="3"] .matrix-quadrant-header { background-color: var(--q3-color); }
+.matrix-quadrant[data-quadrant="4"] .matrix-quadrant-header { background-color: var(--q4-color); }
+
+.matrix-quadrant-content {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 150px;
+}
+
+/* Dự án con trong Ma trận */
+.matrix-project-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-main);
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.matrix-project-item:hover {
+  border-color: var(--primary);
+}
+
+.matrix-project-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.matrix-project-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.matrix-project-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ----------------------------------------------------
+   VIEW: Quản lý Thành viên
+   ---------------------------------------------------- */
+.member-list-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.member-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.member-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all var(--transition-normal);
+}
+
+.member-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.member-card-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.member-card .member-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.member-card-info h4 {
+  font-size: 1.05rem;
+  color: var(--text-main);
+}
+
+.member-card-info p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.member-card-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.member-card-actions button {
+  color: var(--text-muted);
+  padding: 0.25rem;
+}
+
+.member-card-actions button:hover {
+  color: var(--text-main);
+}
+
+.member-card-actions button.btn-member-delete:hover {
+  color: #ef4444;
+}
+
+/* ----------------------------------------------------
+   HIỆU ỨNG KÉO THẢ (Drag & Drop Classes)
+   ---------------------------------------------------- */
+.draggable {
+  user-select: none;
+  touch-action: none;
+}
+
+.dragging {
+  opacity: 0.3 !important;
+  border: 2px dashed var(--primary) !important;
+  background-color: var(--bg-main) !important;
+}
+
+.drag-ghost {
+  opacity: 0.9 !important;
+  box-shadow: var(--shadow-drag) !important;
+  transform: rotate(2deg) scale(1.02) !important;
+  cursor: grabbing !important;
+  pointer-events: none;
+  background-color: var(--bg-card);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-sm);
+}
+
+.drag-placeholder {
+  border: 2px dashed var(--border-color);
+  background-color: rgba(99, 102, 241, 0.05);
+  border-radius: var(--radius-sm);
+  margin-bottom: 1rem;
+  transition: height 0.1s ease;
+}
+
+.drop-zone.drag-over {
+  background-color: rgba(99, 102, 241, 0.03);
+  border-color: var(--primary) !important;
+}
+
+/* ----------------------------------------------------
+   MODAL (Hộp thoại Popup)
+   ---------------------------------------------------- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.5); /* Slate 900 */
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.modal-overlay.active {
+  display: flex;
+  opacity: 1;
+}
+
+.modal-box {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  width: 100%;
+  max-width: 520px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.95);
+  transition: transform var(--transition-normal);
+}
+
+.modal-overlay.active .modal-box {
+  transform: scale(1);
+}
+
+.modal-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  font-size: 1.2rem;
+  color: var(--text-main);
+}
+
+.btn-close-modal {
+  color: var(--text-muted);
+}
+
+.btn-close-modal:hover {
+  color: var(--text-main);
+}
+
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  max-height: 70vh;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background-color: var(--input-bg);
+  color: var(--text-main);
+  font-size: 0.95rem;
+  transition: border-color var(--transition-fast);
+}
+
+.form-control:focus {
+  border-color: var(--primary);
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Chọn màu thành viên */
+.color-picker-grid {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.color-option {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  border: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.color-option.selected {
+  border-color: var(--text-main);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Chọn thành viên cho Dự án/Công việc */
+.member-checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 150px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+}
+
+.member-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.35rem 0.5rem;
+  border-radius: 4px;
+}
+
+.member-checkbox-item:hover {
+  background-color: var(--bg-main);
+}
+
+.member-checkbox-item input {
+  cursor: pointer;
+}
+
+.modal-footer {
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* ----------------------------------------------------
+   MEDIA QUERIES (Tối ưu thiết bị di động)
+   ---------------------------------------------------- */
+@media (max-width: 768px) {
+  /* Chuyển Sidebar thành Bottom Navigation Bar */
+  .sidebar {
+    width: 100%;
+    height: 64px;
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    flex-direction: row;
+    padding: 0;
+    border-right: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    justify-content: space-between;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .brand {
+    display: none; /* Ẩn Logo trên mobile */
+  }
+
+  .nav-links {
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    justify-content: space-around;
+    gap: 0;
+    align-items: center;
+  }
+
+  .nav-item {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .nav-item button {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0;
+    height: 100%;
+    border-radius: 0;
+    font-size: 0.7rem;
+    text-align: center;
+    color: var(--text-sidebar);
+  }
+
+  .nav-item button svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .nav-item button:hover svg {
+    transform: none; /* Tắt chuyển động đẩy */
+  }
+
+  .nav-item.active button {
+    background-color: transparent;
+    color: var(--primary);
+  }
+
+  .nav-item.active button svg {
+    color: var(--primary);
+  }
+
+  .sidebar-footer {
+    display: none; /* Ẩn footer sidebar trên mobile */
+  }
+
+  /* Bố cục nội dung chính */
+  .main-content {
+    margin-left: 0;
+    padding: 1rem 1rem 5.5rem 1rem; /* Bổ sung padding-bottom để tránh đè lên Bottom Nav */
+    max-width: 100vw;
+    gap: 1.5rem;
+  }
+
+  .main-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  /* Dashboard mobile */
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .stat-number {
+    font-size: 1.75rem;
+  }
+
+  .stat-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Project Mobile Grid */
+  .project-cards-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* Bảng Kanban Mobile */
+  .kanban-board-container {
+    grid-template-columns: 1fr; /* Trở thành cột dọc */
+    gap: 1.5rem;
+  }
+
+  .kanban-column {
+    max-height: 400px; /* Hạn chế chiều cao để cuộn từng cột */
+  }
+
+  /* Ma trận Eisenhower Mobile */
+  .matrix-grid {
+    grid-template-columns: 1fr; /* Bốn ô xếp chồng nhau */
+    grid-template-rows: auto;
+    gap: 1rem;
+    min-height: auto;
+  }
+
+  .matrix-quadrant {
+    height: 320px;
+  }
+
+  /* List View Mobile */
+  .task-list-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    position: relative;
+    padding: 1rem;
+  }
+
+  .task-row-meta {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--border-color);
+    padding-top: 0.5rem;
+  }
+
+  /* Modal */
+  .modal-box {
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    max-width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    transform: translateY(100%);
+    transition: transform var(--transition-normal);
+  }
+
+  .modal-overlay.active .modal-box {
+    transform: translateY(0);
+  }
+}
+
+/* Toggle nút đổi sáng tối trên thanh header cho mobile */
+.mobile-theme-toggle {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+  }
+  
+  .mobile-theme-toggle svg {
+    width: 20px;
+    height: 20px;
+  }
+}
