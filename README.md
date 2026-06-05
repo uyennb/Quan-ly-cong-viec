@@ -49,3 +49,7 @@ python3 -m http.server 8083
 ```
 
 Sau đó, truy cập địa chỉ: [http://localhost:8083/](http://localhost:8083/) để trải nghiệm.
+
+## 📝 Đóng góp ý kiến
+
+Mọi ý kiến đóng góp hoặc báo lỗi, vui lòng tạo Issue trên GitHub hoặc gửi Pull Request để hoàn thiện ứng dụng.
