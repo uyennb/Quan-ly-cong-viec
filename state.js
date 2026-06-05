@@ -3,11 +3,20 @@
 
 const STORAGE_KEY = 'quan_ly_cong_viec_data';
 
+export const DEFAULT_DEPARTMENTS = ['Kỹ thuật', 'Marketing', 'Thiết kế', 'Kinh doanh', 'Nhân sự'];
+
+const DEFAULT_TAGS = [
+  { id: 'tag_1', name: 'Gấp', color: '#ef4444' },        // Đỏ
+  { id: 'tag_2', name: 'Quan trọng', color: '#f59e0b' }, // Cam
+  { id: 'tag_3', name: 'Nội bộ', color: '#3b82f6' },    // Xanh dương
+  { id: 'tag_4', name: 'Khách hàng', color: '#10b981' }   // Xanh lá
+];
+
 const DEFAULT_MEMBERS = [
-  { id: 'm1', name: 'Nguyễn Văn A', role: 'Quản lý dự án', color: '#ef4444' }, // Đỏ
-  { id: 'm2', name: 'Trần Thị B', role: 'Lập trình viên', color: '#3b82f6' }, // Xanh dương
-  { id: 'm3', name: 'Lê Văn C', role: 'Nhà thiết kế', color: '#10b981' }, // Xanh lá
-  { id: 'm4', name: 'Phạm Minh D', role: 'Kiểm thử viên', color: '#f59e0b' }  // Vàng
+  { id: 'm1', name: 'Nguyễn Văn A', role: 'Quản lý dự án', color: '#ef4444' },
+  { id: 'm2', name: 'Trần Thị B', role: 'Lập trình viên', color: '#3b82f6' },
+  { id: 'm3', name: 'Lê Văn C', role: 'Nhà thiết kế', color: '#10b981' },
+  { id: 'm4', name: 'Phạm Minh D', role: 'Kiểm thử viên', color: '#f59e0b' }
 ];
 
 const DEFAULT_PROJECTS = [
@@ -15,45 +24,29 @@ const DEFAULT_PROJECTS = [
     id: 'p1',
     name: 'Xây dựng Website bán hàng',
     description: 'Dự án thương mại điện tử tích hợp thanh toán trực tuyến.',
-    quadrant: 1, // 1: Khẩn cấp & Quan trọng, 2: Quan trọng - Không khẩn cấp, 3: Khẩn cấp - Không quan trọng, 4: Không khẩn cấp - Không quan trọng
+    quadrant: 1, // Khẩn cấp & Quan trọng
+    department: 'Kỹ thuật',
+    tags: ['tag_3'], // Nội bộ
+    visibleColumns: ['todo', 'in-progress', 'done'],
     members: ['m1', 'm2', 'm3', 'm4'],
     tasks: [
-      { id: 't1', name: 'Thiết kế giao diện Trang chủ', description: 'Thiết kế bản vẽ giao diện sáng/tối trên Figma và xuất tài nguyên.', status: 'done', assignedTo: ['m3'] },
-      { id: 't2', name: 'Lập trình API giỏ hàng', description: 'Xây dựng cơ sở dữ liệu giỏ hàng và các API thêm/sửa/xóa sản phẩm.', status: 'in-progress', assignedTo: ['m2'] },
-      { id: 't3', name: 'Tích hợp cổng thanh toán MoMo', description: 'Kết nối API môi trường Sandbox MoMo để kiểm thử.', status: 'todo', assignedTo: ['m2', 'm1'] },
-      { id: 't4', name: 'Viết tài liệu hướng dẫn sử dụng', description: 'Tài liệu chi tiết hướng dẫn thao tác admin và người dùng.', status: 'todo', assignedTo: ['m4'] }
+      { id: 't1', name: 'Thiết kế giao diện Trang chủ', description: 'Thiết kế bản vẽ giao diện sáng/tối trên Figma.', status: 'done', assignedTo: ['m3'], tags: ['tag_3'] },
+      { id: 't2', name: 'Lập trình API giỏ hàng', description: 'Xây dựng cơ sở dữ liệu giỏ hàng và các API.', status: 'in-progress', assignedTo: ['m2'], tags: ['tag_1'] },
+      { id: 't3', name: 'Tích hợp cổng thanh toán MoMo', description: 'Kết nối API môi trường Sandbox MoMo.', status: 'todo', assignedTo: ['m2', 'm1'], tags: ['tag_1', 'tag_2'] }
     ]
   },
   {
     id: 'p2',
     name: 'Chiến dịch Marketing sản phẩm mới',
     description: 'Lên kế hoạch quảng bá sản phẩm ứng dụng quản trị doanh nghiệp.',
-    quadrant: 2, // Quan trọng nhưng không khẩn cấp
+    quadrant: 2, // Quan trọng - Không khẩn cấp
+    department: 'Marketing',
+    tags: ['tag_4'], // Khách hàng
+    visibleColumns: ['todo', 'in-progress', 'done'],
     members: ['m1', 'm3'],
     tasks: [
-      { id: 't5', name: 'Lập ngân sách quảng cáo', description: 'Tính toán chi phí chạy quảng cáo Facebook, Google và báo cáo sếp.', status: 'done', assignedTo: ['m1'] },
-      { id: 't6', name: 'Viết bài giới thiệu sản phẩm', description: 'Chuẩn bị nội dung bài viết PR trên các kênh truyền thông chính.', status: 'in-progress', assignedTo: ['m1'] },
-      { id: 't7', name: 'Thiết kế banner quảng cáo', description: 'Tạo các ấn phẩm đồ họa cho bài viết PR mạng xã hội.', status: 'todo', assignedTo: ['m3'] }
-    ]
-  },
-  {
-    id: 'p3',
-    name: 'Trả lời email của đối tác',
-    description: 'Giải quyết các thắc mắc về hợp đồng dịch vụ kỹ thuật.',
-    quadrant: 3, // Khẩn cấp nhưng không quan trọng
-    members: ['m1'],
-    tasks: [
-      { id: 't8', name: 'Phản hồi email anh Nam (VNG)', description: 'Xác nhận thời gian họp bàn về tiến độ tích hợp hệ thống.', status: 'todo', assignedTo: ['m1'] }
-    ]
-  },
-  {
-    id: 'p4',
-    name: 'Dọn dẹp tài liệu cũ trên Google Drive',
-    description: 'Giải phóng dung lượng lưu trữ đám mây cho công ty.',
-    quadrant: 4, // Không khẩn cấp và không quan trọng
-    members: ['m1', 'm4'],
-    tasks: [
-      { id: 't9', name: 'Lọc các tệp tin lưu tạm', description: 'Xóa hoặc lưu trữ cục bộ các tệp tin tạm không sử dụng từ năm 2024.', status: 'done', assignedTo: ['m4'] }
+      { id: 't5', name: 'Lập ngân sách quảng cáo', description: 'Tính toán chi phí chạy quảng cáo Facebook, Google.', status: 'done', assignedTo: ['m1'], tags: ['tag_3'] },
+      { id: 't6', name: 'Viết bài giới thiệu sản phẩm', description: 'Chuẩn bị nội dung bài viết PR.', status: 'in-progress', assignedTo: ['m1'], tags: ['tag_4'] }
     ]
   }
 ];
@@ -61,6 +54,8 @@ const DEFAULT_PROJECTS = [
 export const State = {
   projects: [],
   members: [],
+  tags: [],
+  departments: [],
   theme: 'light',
 
   // Khởi tạo trạng thái
@@ -69,9 +64,26 @@ export const State = {
     if (this.projects.length === 0 && this.members.length === 0) {
       this.projects = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
       this.members = JSON.parse(JSON.stringify(DEFAULT_MEMBERS));
+      this.tags = JSON.parse(JSON.stringify(DEFAULT_TAGS));
+      this.departments = JSON.parse(JSON.stringify(DEFAULT_DEPARTMENTS));
       this.theme = 'light';
       this.save();
     }
+    // Đảm bảo các thuộc tính mới tồn tại nếu nâng cấp từ bản cũ
+    if (!this.tags || this.tags.length === 0) {
+      this.tags = JSON.parse(JSON.stringify(DEFAULT_TAGS));
+    }
+    if (!this.departments || this.departments.length === 0) {
+      this.departments = JSON.parse(JSON.stringify(DEFAULT_DEPARTMENTS));
+    }
+    this.projects.forEach(p => {
+      if (!p.department) p.department = '';
+      if (!p.tags) p.tags = [];
+      if (!p.visibleColumns) p.visibleColumns = ['todo', 'in-progress', 'done'];
+      p.tasks.forEach(t => {
+        if (!t.tags) t.tags = [];
+      });
+    });
   },
 
   // Đọc dữ liệu từ localStorage
@@ -82,6 +94,8 @@ export const State = {
         const parsed = JSON.parse(data);
         this.projects = parsed.projects || [];
         this.members = parsed.members || [];
+        this.tags = parsed.tags || [];
+        this.departments = parsed.departments || [];
         this.theme = parsed.theme || 'light';
       }
     } catch (e) {
@@ -95,6 +109,8 @@ export const State = {
       const data = {
         projects: this.projects,
         members: this.members,
+        tags: this.tags,
+        departments: this.departments,
         theme: this.theme
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -104,13 +120,16 @@ export const State = {
   },
 
   // --- Quản lý Dự án ---
-  addProject(name, description, quadrant, memberIds = []) {
+  addProject(name, description, quadrant, memberIds = [], department = '', tagIds = []) {
     const id = 'p_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     const newProject = {
       id,
       name,
       description,
       quadrant: parseInt(quadrant) || 1,
+      department: department || '',
+      tags: tagIds,
+      visibleColumns: ['todo', 'in-progress', 'done'],
       members: memberIds,
       tasks: []
     };
@@ -193,8 +212,51 @@ export const State = {
     return false;
   },
 
+  // --- Quản lý Nhãn Thẻ (Tags) ---
+  addTag(name, color) {
+    const id = 'tag_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    const newTag = { id, name, color };
+    this.tags.push(newTag);
+    this.save();
+    return newTag;
+  },
+
+  updateTag(id, name, color) {
+    const tag = this.tags.find(t => t.id === id);
+    if (tag) {
+      tag.name = name;
+      tag.color = color;
+      this.save();
+      return tag;
+    }
+    return null;
+  },
+
+  deleteTag(id) {
+    const index = this.tags.findIndex(t => t.id === id);
+    if (index !== -1) {
+      this.tags.splice(index, 1);
+
+      // Loại bỏ thẻ bị xóa khỏi tất cả dự án và công việc
+      this.projects.forEach(p => {
+        if (p.tags) {
+          p.tags = p.tags.filter(tId => tId !== id);
+        }
+        p.tasks.forEach(t => {
+          if (t.tags) {
+            t.tags = t.tags.filter(tId => tId !== id);
+          }
+        });
+      });
+
+      this.save();
+      return true;
+    }
+    return false;
+  },
+
   // --- Quản lý Công việc (Tasks) ---
-  addTask(projectId, name, description, status = 'todo', assignedTo = []) {
+  addTask(projectId, name, description, status = 'todo', assignedTo = [], tagIds = []) {
     const project = this.projects.find(p => p.id === projectId);
     if (!project) return null;
 
@@ -204,7 +266,8 @@ export const State = {
       name,
       description,
       status, // 'todo', 'in-progress', 'done'
-      assignedTo
+      assignedTo,
+      tags: tagIds
     };
     project.tasks.push(newTask);
     this.save();
@@ -263,8 +326,6 @@ export const State = {
     task.status = newStatus;
 
     if (newIndex !== null && newIndex >= 0) {
-      // Tìm danh sách task có cùng status mới để chèn vào vị trí tương ứng trong danh sách tổng
-      // Để làm điều này đơn giản hơn: chúng ta sẽ chèn vào mảng chung dựa trên chỉ số tương đối của cột đó.
       let inserted = false;
       let countOfNewStatus = 0;
       for (let i = 0; i < project.tasks.length; i++) {
@@ -281,7 +342,6 @@ export const State = {
         project.tasks.push(task);
       }
     } else {
-      // Đưa xuống cuối danh sách
       project.tasks.push(task);
     }
 
